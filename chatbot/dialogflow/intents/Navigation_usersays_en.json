@@ -1,0 +1,83 @@
+[
+  {
+    "id": "6b82e759-fb47-4dbf-9613-b48aa2832422",
+    "data": [
+      {
+        "text": "How do I use this app?"
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "421dc324-6ff4-4449-8dee-1ce5661dac5f",
+    "data": [
+      {
+        "text": "help"
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "2acc7da3-063c-49ad-80cb-2c35ed125356",
+    "data": [
+      {
+        "text": "How do I book an appointment?"
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "22c4a71b-c2d5-4f7f-b494-4fd2ff08237c",
+    "data": [
+      {
+        "text": "Where is my "
+      },
+      {
+        "text": "dashboard",
+        "alias": "topic",
+        "meta": "@navigation-topic",
+        "userDefined": true
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "b7608d7a-2302-4c46-b146-a6fa8d4410e1",
+    "data": [
+      {
+        "text": "How do I get to my "
+      },
+      {
+        "text": "profile",
+        "alias": "topic",
+        "meta": "@navigation-topic",
+        "userDefined": true
+      },
+      {
+        "text": " settings?"
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "48f6d1e7-c0f1-4a6d-8e55-89915d877bc6",
+    "data": [
+      {
+        "text": "What can you help me with?"
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  }
+]

@@ -1,0 +1,46 @@
+{
+  "id": "4b230f1c-f5e9-4a57-b4ca-a8d94beaf79d",
+  "name": "SubmitConcern",
+  "auto": true,
+  "contexts": [],
+  "responses": [
+    {
+      "resetContexts": false,
+      "action": "concern.submit",
+      "affectedContexts": [],
+      "parameters": [
+        {
+          "id": "f63f0a9e-1097-4582-ade3-376f954e1989",
+          "name": "concern",
+          "required": true,
+          "dataType": "@sys.any",
+          "value": "$concern",
+          "defaultValue": "",
+          "isList": false,
+          "prompts": [
+            "Please describe the concern you would like to submit."
+          ],
+          "promptMessages": [],
+          "noMatchPromptMessages": [],
+          "noInputPromptMessages": [],
+          "outputDialogContexts": []
+        }
+      ],
+      "messages": [
+        {
+          "type": "0",
+          "lang": "en",
+          "condition": "",
+          "speech": []
+        }
+      ],
+      "defaultResponsePlatforms": {},
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": true,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": []
+}

@@ -1,0 +1,14 @@
+{
+  "universe_domain": "googleapis.com",
+  "type": "external_account",
+  "audience": "//iam.googleapis.com/projects/5543570102/locations/global/workloadIdentityPools/gitlab-pool/providers/gitlab-provider",
+  "subject_token_type": "urn:ietf:params:oauth:token-type:jwt",
+  "token_url": "https://sts.googleapis.com/v1/token",
+  "credential_source": {
+    "file": "/tmp/gitlab-oidc-token",
+    "format": {
+      "type": "text"
+    }
+  },
+  "service_account_impersonation_url": "https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/saws-ci-deployer@serverless-project-501905.iam.gserviceaccount.com:generateAccessToken"
+}

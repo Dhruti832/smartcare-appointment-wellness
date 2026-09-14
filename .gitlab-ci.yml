@@ -1,0 +1,214 @@
+# No deploy-aws stage: AWS is applied by hand, for the Learner Lab credential
+# reasons documented above that section below.
+stages:
+  - lint
+  - test
+  - build
+  - deploy-gcp
+
+variables:
+  AWS_REGION: us-east-1
+  GCP_REGION: us-central1
+  # botocore refuses to construct a client without a region, and the Lambda
+  # modules build theirs at import time — so pytest fails at *collection*
+  # without this, before a single test runs. No credentials are needed: the
+  # tests stub every AWS call.
+  AWS_DEFAULT_REGION: us-east-1
+
+# ─── LINT ────────────────────────────────────────────────────────────────────
+
+lint-frontend:
+  stage: lint
+  image: node:18-alpine
+  cache:
+    key: frontend-npm
+    paths:
+      - frontend/node_modules/
+  script:
+    - cd frontend
+    - npm ci
+    - npm run lint
+  only:
+    - merge_requests
+    - develop
+    - main
+
+lint-backend:
+  stage: lint
+  image: python:3.11-slim
+  script:
+    - pip install --quiet flake8
+    - flake8 backend/ --count
+  only:
+    - merge_requests
+    - develop
+    - main
+
+# Catches malformed HCL, bad references and wrong attribute types before anyone
+# applies. Runs with -backend=false so it needs no credentials and never touches
+# remote state — which matters, since the whole team shares one state file.
+validate-terraform:
+  stage: lint
+  image:
+    name: hashicorp/terraform:1.9
+    entrypoint: [""]
+  parallel:
+    matrix:
+      - CLOUD: [aws, gcp]
+  script:
+    - cd infrastructure/$CLOUD/terraform
+    - terraform init -backend=false -input=false
+    - terraform validate
+    - terraform fmt -check -recursive
+  only:
+    - merge_requests
+    - develop
+    - main
+
+# ─── TEST ────────────────────────────────────────────────────────────────────
+# 149 tests: 109 pytest across the five Lambda modules, 40 jest across the four
+# Cloud Function packages. Everything is stubbed at the boundary, so no test
+# needs cloud credentials or reaches a real AWS/GCP resource.
+
+# The suites import the handler modules directly (`from register import ...`)
+# rather than by package path, so pytest has to run from inside the module
+# directory for the import to resolve — hence the cd. The matrix turns this into
+# one job per module, so a failure names the module in the pipeline view.
+test-backend:
+  stage: test
+  image: python:3.11-slim
+  parallel:
+    matrix:
+      - MODULE: [auth, appointments, services, feedback, notifications]
+  script:
+    - pip install --quiet boto3 pytest
+    # feedback and notifications have no requirements.txt of their own; boto3
+    # and pytest above are all any of the five actually need.
+    - if [ -f "backend/$MODULE/requirements.txt" ]; then pip install --quiet -r "backend/$MODULE/requirements.txt"; fi
+    - cd "backend/$MODULE"
+    - python -m pytest "../../tests/$MODULE" -v
+  only:
+    - merge_requests
+    - develop
+    - main
+
+test-cloud-functions:
+  stage: test
+  image: node:18-alpine
+  parallel:
+    matrix:
+      - MODULE: [chatbot, messaging, analytics, appointments]
+  script:
+    - cd "$MODULE/functions"
+    - npm ci
+    - npx jest --ci
+  only:
+    - merge_requests
+    - develop
+    - main
+
+# ─── BUILD ───────────────────────────────────────────────────────────────────
+
+build-frontend:
+  stage: build
+  image: node:18-alpine
+  cache:
+    key: frontend-npm
+    paths:
+      - frontend/node_modules/
+  script:
+    - cd frontend
+    - npm ci
+    - npm run build
+  artifacts:
+    paths:
+      - frontend/build/
+    expire_in: 1 week
+  only:
+    - merge_requests
+    - develop
+    - main
+
+# ─── DEPLOY AWS ──────────────────────────────────────────────────────────────
+# Deliberately manual — `terraform apply` from infrastructure/aws/terraform.
+#
+# This is a platform limit, not unfinished work. Automating it needs a durable
+# credential in GitLab, and AWS Academy Learner Lab offers neither route:
+#
+#   * its credentials are session tokens that expire in ~4 hours, so anything
+#     stored as a CI variable is dead before the next merge; and
+#   * the keyless federation used for GCP below requires creating an IAM
+#     identity provider and role, which Learner Lab forbids — the same
+#     restriction that makes every Lambda borrow the pre-existing LabRole
+#     (see data.aws_iam_role.lab_role in auth.tf).
+#
+# validate-terraform above still checks this tree on every merge request, which
+# is the part that can be automated without credentials.
+
+# ─── DEPLOY GCP ──────────────────────────────────────────────────────────────
+# GCP infrastructure (Cloud Functions, Firestore, Pub/Sub, BigQuery) is also
+# applied manually from infrastructure/gcp/terraform. Keyless auth would make
+# automating it possible, but auto-applying Terraform on merge can destroy
+# resources on a bad plan — the safe shape is plan-on-MR plus a manual apply,
+# which is worth doing deliberately rather than late.
+#
+# The frontend container below *is* automated: it is additive, instantly
+# reversible by shifting traffic to the previous revision, and touches no
+# stateful resource.
+
+deploy-frontend-cloudrun:
+  stage: deploy-gcp
+  image: google/cloud-sdk:alpine
+  # Builds via Cloud Build rather than Docker on the runner — Docker-in-Docker
+  # needs a privileged runner, which shared runners generally don't allow. This
+  # job only needs the gcloud CLI.
+  #
+  # Runs on develop (the integration branch the team deploys from, per
+  # docs/architecture/setup.md "Integration Environment"), not main.
+  # Keyless auth via Workload Identity Federation. Dal's org policy
+  # (constraints/iam.disableServiceAccountKeyCreation) blocks service account
+  # key creation outright, so there is no key to store — GitLab mints a
+  # short-lived OIDC token per job and GCP exchanges it for credentials.
+  # The provider only trusts tokens whose project_path is this repo.
+  id_tokens:
+    GITLAB_OIDC_TOKEN:
+      aud: https://iam.googleapis.com/projects/5543570102/locations/global/workloadIdentityPools/gitlab-pool/providers/gitlab-provider
+  script:
+    # gitlab-wif-config.json holds no secrets — just the pool/provider audience
+    # and which service account to impersonate — so it lives in the repo.
+    - echo "$GITLAB_OIDC_TOKEN" > /tmp/gitlab-oidc-token
+    - gcloud auth login --cred-file="$CI_PROJECT_DIR/infrastructure/gcp/gitlab-wif-config.json"
+    - gcloud config set project "$GCP_PROJECT_ID"
+    - gcloud auth list
+    - cd frontend
+    # Built up one key at a time rather than as a single backslash-continued
+    # string: inside double quotes bash strips the backslash and newline but
+    # keeps the next line's indentation, which would embed spaces after every
+    # comma and make gcloud reject the substitution keys.
+    - |
+      SUBS="_TAG=${CI_COMMIT_SHORT_SHA}"
+      SUBS="${SUBS},_AUTH_API_URL=${REACT_APP_AUTH_API_URL}"
+      SUBS="${SUBS},_APPOINTMENTS_API_URL=${REACT_APP_APPOINTMENTS_API_URL}"
+      SUBS="${SUBS},_PUBLISH_CONCERN_URL=${REACT_APP_PUBLISH_CONCERN_URL}"
+      SUBS="${SUBS},_POST_REPLY_URL=${REACT_APP_POST_REPLY_URL}"
+      SUBS="${SUBS},_DF_AGENT_ID=${REACT_APP_DF_AGENT_ID}"
+      SUBS="${SUBS},_GCP_PROJECT_ID=${REACT_APP_GCP_PROJECT_ID}"
+      SUBS="${SUBS},_FIREBASE_API_KEY=${REACT_APP_FIREBASE_API_KEY}"
+      SUBS="${SUBS},_LOOKER_REPORT_URL=${REACT_APP_LOOKER_REPORT_URL}"
+      gcloud builds submit --config cloudbuild.yaml --substitutions="$SUBS" .
+    # Deploying by immutable commit-SHA tag is what actually creates a new
+    # revision. Cloud Run pins a revision to the digest a tag resolved to when
+    # it was created, so re-pushing :latest alone never rolls anything out —
+    # see the lifecycle block in infrastructure/gcp/terraform/main.tf.
+    - |
+      gcloud run deploy saws-frontend-dev \
+        --image "gcr.io/${GCP_PROJECT_ID}/saws-frontend:${CI_COMMIT_SHORT_SHA}" \
+        --region "$GCP_REGION"
+    - gcloud run services describe saws-frontend-dev --region "$GCP_REGION" --format="value(status.url)"
+  after_script:
+    - rm -f /tmp/gitlab-oidc-token
+  environment:
+    name: dev
+    url: https://saws-frontend-dev-5543570102.us-central1.run.app
+  only:
+    - develop

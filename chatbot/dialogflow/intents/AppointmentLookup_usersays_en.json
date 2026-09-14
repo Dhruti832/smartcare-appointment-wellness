@@ -1,0 +1,84 @@
+[
+  {
+    "id": "704649c7-101b-4006-a3c6-484f139a031c",
+    "data": [
+      {
+        "text": "Can you look up my appointment "
+      },
+      {
+        "text": "APT-1001",
+        "alias": "referenceCode",
+        "meta": "@sys.any",
+        "userDefined": true
+      },
+      {
+        "text": "?"
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "b8e0c2df-0287-4648-ba7d-cdef969b8b66",
+    "data": [
+      {
+        "text": "Show me the status of appointment "
+      },
+      {
+        "text": "APT-9999",
+        "alias": "referenceCode",
+        "meta": "@sys.any",
+        "userDefined": true
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "3db033cb-4261-42df-a051-31eecdaca835",
+    "data": [
+      {
+        "text": "What is the status of "
+      },
+      {
+        "text": "APT-DEMO-1",
+        "alias": "referenceCode",
+        "meta": "@sys.any",
+        "userDefined": true
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "583f4557-f2e9-48e8-96dd-f83c83b99ec4",
+    "data": [
+      {
+        "text": "I want to check my booking reference "
+      },
+      {
+        "text": "APT-2044",
+        "alias": "referenceCode",
+        "meta": "@sys.any",
+        "userDefined": true
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "9af090fa-ba1c-4d19-a54a-5552db76e689",
+    "data": [
+      {
+        "text": "Look up my appointment"
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  }
+]

@@ -1,0 +1,46 @@
+{
+  "id": "e0d3f148-33b3-4492-8988-31b2f07e68b0",
+  "name": "WellnessInquiry",
+  "auto": true,
+  "contexts": [],
+  "responses": [
+    {
+      "resetContexts": false,
+      "action": "service.inquiry",
+      "affectedContexts": [],
+      "parameters": [
+        {
+          "id": "243cee8f-e0d2-43ae-b21d-3157f9a73045",
+          "name": "serviceType",
+          "required": true,
+          "dataType": "@service-type",
+          "value": "$serviceType",
+          "defaultValue": "",
+          "isList": false,
+          "prompts": [
+            "Which wellness service are you interested in?"
+          ],
+          "promptMessages": [],
+          "noMatchPromptMessages": [],
+          "noInputPromptMessages": [],
+          "outputDialogContexts": []
+        }
+      ],
+      "messages": [
+        {
+          "type": "0",
+          "lang": "en",
+          "condition": "",
+          "speech": []
+        }
+      ],
+      "defaultResponsePlatforms": {},
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": true,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": []
+}

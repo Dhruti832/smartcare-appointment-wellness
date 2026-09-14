@@ -1,0 +1,27 @@
+{
+  "description": "SAWS virtual assistant — navigation, FAQ, appointment lookup, wellness inquiry, concern submission.",
+  "language": "en",
+  "defaultTimezone": "America/New_York",
+  "shortDescription": "",
+  "examples": "",
+  "linkToDocs": "",
+  "displayName": "SAWS Assistant",
+  "category": "MEDICAL",
+  "webhook": {
+    "url": "https://REGION-PROJECT_ID.cloudfunctions.net/saws-chatbot-fulfillment-dev",
+    "headers": {},
+    "available": false,
+    "useForDomains": false,
+    "cloudFunctionsEnabled": false,
+    "cloudFunctionsInitialized": false
+  },
+  "isPrivate": true,
+  "customClassifier": false,
+  "mlMinConfidence": 0.5,
+  "supportedLanguages": [],
+  "onePlatformApiVersion": "v2",
+  "analyzeQueryTextSentiment": false,
+  "enabledKnowledgeBaseNames": [],
+  "knowledgeServiceConfidenceAdjustment": -0.4,
+  "dialogBuildingMode": "automatic"
+}

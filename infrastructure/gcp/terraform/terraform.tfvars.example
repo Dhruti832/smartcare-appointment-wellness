@@ -1,0 +1,9 @@
+gcp_project_id = "your-gcp-project-id"
+gcp_region     = "us-central1"
+environment    = "dev"
+
+# Feedback mirror (analytics.tf) — shared secret the AWS export Lambda sends
+# back as X-Export-Token; must match gcp_feedback_mirror_shared_secret in
+# infrastructure/aws/terraform/terraform.tfvars. Leave blank to accept
+# unauthenticated requests (course-scope default).
+feedback_export_shared_secret = ""

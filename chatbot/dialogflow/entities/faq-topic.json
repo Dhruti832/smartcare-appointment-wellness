@@ -1,0 +1,9 @@
+{
+  "id": "cd2b2f47-b036-4f20-afe4-d8d917bdc183",
+  "name": "faq-topic",
+  "isOverridable": true,
+  "isEnum": false,
+  "isRegexp": false,
+  "automatedExpansion": false,
+  "allowFuzzyExtraction": false
+}

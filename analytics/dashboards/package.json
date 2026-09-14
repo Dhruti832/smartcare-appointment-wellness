@@ -1,0 +1,12 @@
+{
+  "name": "saws-analytics-dashboards",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Firestore seed data for the SAWS Looker Studio dashboard",
+  "scripts": {
+    "seed": "node seed_data.js"
+  },
+  "dependencies": {
+    "@google-cloud/firestore": "^7.9.0"
+  }
+}

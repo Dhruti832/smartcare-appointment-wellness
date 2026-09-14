@@ -1,0 +1,46 @@
+{
+  "id": "c5f0b4c0-c251-4724-b502-fb54cba1552f",
+  "name": "AppointmentLookup",
+  "auto": true,
+  "contexts": [],
+  "responses": [
+    {
+      "resetContexts": false,
+      "action": "appointment.lookup",
+      "affectedContexts": [],
+      "parameters": [
+        {
+          "id": "a0cf536f-b3f5-4086-90a9-ec6e18f7381a",
+          "name": "referenceCode",
+          "required": true,
+          "dataType": "@sys.any",
+          "value": "$referenceCode",
+          "defaultValue": "",
+          "isList": false,
+          "prompts": [
+            "What's your appointment reference code?"
+          ],
+          "promptMessages": [],
+          "noMatchPromptMessages": [],
+          "noInputPromptMessages": [],
+          "outputDialogContexts": []
+        }
+      ],
+      "messages": [
+        {
+          "type": "0",
+          "lang": "en",
+          "condition": "",
+          "speech": []
+        }
+      ],
+      "defaultResponsePlatforms": {},
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": true,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": []
+}

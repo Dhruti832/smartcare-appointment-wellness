@@ -1,0 +1,23 @@
+aws_region  = "us-east-1"
+environment = "dev"
+
+# Recipient of SNS notifications (must confirm the subscription email once)
+notification_email = "you@example.com"
+
+# Sentiment engine (analytics.tf) — Google Natural Language API key. Required
+# (no default); terraform apply prompts for it interactively if left unset.
+google_api_key = ""
+
+# Cross-cloud mirrors (appointments.tf, feedback_export.tf) — the AWS Lambdas
+# export each row to S3 and POST a short-lived presigned URL to these GCP Cloud
+# Functions, which write it into Firestore. IMPORTANT: leave a *_url blank and
+# that mirror silently does nothing at all — do not leave these unset in the
+# integration/demo environment. The URLs are the shared GCP functions
+# (`terraform output {appointments,feedback}_mirror_url` in
+# infrastructure/gcp/terraform). The functions run public for course scope, so
+# the shared-secret vars stay blank; set one only if its GCP function was
+# deployed with a matching secret.
+gcp_appointments_mirror_url           = "https://saws-appointments-mirror-dev-hhuecvmxwq-uc.a.run.app"
+gcp_appointments_mirror_shared_secret = ""
+gcp_feedback_mirror_url               = ""
+gcp_feedback_mirror_shared_secret     = ""

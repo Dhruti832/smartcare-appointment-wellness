@@ -1,0 +1,16 @@
+{
+  "name": "saws-analytics-functions",
+  "version": "1.0.0",
+  "description": "SAWS feedback mirror: fetch the AWS-exported feedback CSV and write it into Firestore",
+  "main": "index.js",
+  "dependencies": {
+    "@google-cloud/firestore": "^7.9.0",
+    "csv-parse": "^5.5.6"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0"
+  },
+  "scripts": {
+    "test": "jest"
+  }
+}

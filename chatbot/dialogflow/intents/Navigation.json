@@ -1,0 +1,46 @@
+{
+  "id": "d4235f0a-2f20-49b2-b9cb-a7177bbe9387",
+  "name": "Navigation",
+  "auto": true,
+  "contexts": [],
+  "responses": [
+    {
+      "resetContexts": false,
+      "action": "navigation.help",
+      "affectedContexts": [],
+      "parameters": [
+        {
+          "id": "3d043c89-5024-4f5d-966b-6e98e9b0a025",
+          "name": "topic",
+          "required": false,
+          "dataType": "@navigation-topic",
+          "value": "$topic",
+          "defaultValue": "",
+          "isList": false,
+          "prompts": [],
+          "promptMessages": [],
+          "noMatchPromptMessages": [],
+          "noInputPromptMessages": [],
+          "outputDialogContexts": []
+        }
+      ],
+      "messages": [
+        {
+          "type": "0",
+          "lang": "en",
+          "condition": "",
+          "speech": [
+            "I can help you navigate SAWS: try asking about booking an appointment, your dashboard, or your profile."
+          ]
+        }
+      ],
+      "defaultResponsePlatforms": {},
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": false,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": []
+}

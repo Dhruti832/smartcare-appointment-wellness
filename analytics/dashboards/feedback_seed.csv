@@ -1,0 +1,7 @@
+feedbackId,patientUsername,serviceId,feedbackText,sentimentScore,sentimentMagnitude,sentimentLabel,createdAt
+FB-001,anita,Physiotherapy,"The physiotherapist was wonderful and really listened.",0.82,0.9,POSITIVE,2026-07-02
+FB-002,ben,Nutrition Counselling,"Helpful advice but the wait was a bit long.",0.15,0.6,NEUTRAL,2026-07-03
+FB-003,carlos,Mental Health,"Terrible experience, felt rushed and unheard.",-0.78,0.85,NEGATIVE,2026-07-03
+FB-004,divya,Physiotherapy,"Okay overall, nothing special.",0.05,0.2,NEUTRAL,2026-07-05
+FB-005,evan,Physiotherapy,"Fantastic care, I feel so much better already!",0.9,0.95,POSITIVE,2026-07-05
+FB-006,farah,Mental Health,"Rude staff and confusing booking process.",-0.55,0.7,NEGATIVE,2026-07-06

@@ -1,0 +1,54 @@
+[
+  {
+    "value": "hours",
+    "synonyms": [
+      "hours",
+      "opening hours",
+      "operating hours",
+      "when are you open",
+      "hours of operation",
+      "your schedule"
+    ]
+  },
+  {
+    "value": "booking",
+    "synonyms": [
+      "booking",
+      "how to book",
+      "make an appointment",
+      "book an appointment",
+      "schedule an appointment"
+    ]
+  },
+  {
+    "value": "cancellation",
+    "synonyms": [
+      "cancellation",
+      "cancel",
+      "cancel an appointment",
+      "cancellation policy",
+      "cancel my appointment"
+    ]
+  },
+  {
+    "value": "insurance",
+    "synonyms": [
+      "insurance",
+      "insurance provider",
+      "do you take insurance",
+      "insurance coverage",
+      "insurance plans"
+    ]
+  },
+  {
+    "value": "login",
+    "synonyms": [
+      "login",
+      "log in",
+      "sign in",
+      "signing in",
+      "sign into my account",
+      "trouble logging in"
+    ]
+  }
+]

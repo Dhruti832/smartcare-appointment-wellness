@@ -1,0 +1,19 @@
+[flake8]
+# 130 rather than pycodestyle's 79. The Lambda handlers build boto3 calls and
+# API Gateway response dicts that read worse broken across lines; 79 flagged 134
+# of them and would have made the lint job noise rather than signal.
+max-line-length = 130
+
+# W292 (no newline at end of file) is cosmetic — failing a build over a missing
+# trailing byte trains people to ignore the linter. The checks that catch real
+# defects stay on: the pyflakes F-codes (unused imports, undefined names,
+# shadowed builtins) currently report zero across backend/.
+extend-ignore = W292
+
+exclude =
+    .git,
+    __pycache__,
+    node_modules,
+    .terraform,
+    frontend/build,
+    .pytest_cache

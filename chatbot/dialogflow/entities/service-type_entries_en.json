@@ -1,0 +1,42 @@
+[
+  {
+    "value": "yoga",
+    "synonyms": [
+      "yoga",
+      "yoga classes",
+      "yoga sessions",
+      "yoga class"
+    ]
+  },
+  {
+    "value": "physiotherapy",
+    "synonyms": [
+      "physiotherapy",
+      "physio",
+      "physical therapy",
+      "physio session",
+      "physiotherapy programs"
+    ]
+  },
+  {
+    "value": "nutrition",
+    "synonyms": [
+      "nutrition",
+      "nutrition coaching",
+      "diet coaching",
+      "nutritionist",
+      "diet plan"
+    ]
+  },
+  {
+    "value": "mental-health",
+    "synonyms": [
+      "mental health",
+      "counselling",
+      "counseling",
+      "therapy",
+      "counsellor",
+      "therapy sessions"
+    ]
+  }
+]

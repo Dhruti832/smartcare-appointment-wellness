@@ -1,0 +1,27 @@
+[
+  {
+    "value": "booking",
+    "synonyms": [
+      "booking",
+      "book an appointment",
+      "how do I book"
+    ]
+  },
+  {
+    "value": "dashboard",
+    "synonyms": [
+      "dashboard",
+      "home page",
+      "main page"
+    ]
+  },
+  {
+    "value": "profile",
+    "synonyms": [
+      "profile",
+      "account",
+      "my account",
+      "settings"
+    ]
+  }
+]

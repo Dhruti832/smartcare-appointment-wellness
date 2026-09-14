@@ -1,0 +1,137 @@
+# Cloud Build config for the frontend container.
+#
+# Used by .gitlab-ci.yml's deploy-frontend-cloudrun job instead of building
+# with Docker on the runner: Docker-in-Docker needs a privileged runner, which
+# shared GitLab runners generally don't allow. Here the runner only needs the
+# gcloud CLI, and the image build happens inside GCP.
+#
+# Every REACT_APP_* value has to arrive as a --build-arg: Create React App
+# inlines them into the JS bundle at build time (frontend/Dockerfile), they are
+# not runtime env vars, and .dockerignore keeps .env files out of the build
+# context. A missing one still builds and deploys cleanly, then fails every API
+# call in production, so build-frontend-image below fails fast instead.
+
+substitutions:
+  _TAG: latest
+  _AUTH_API_URL: ''
+  _APPOINTMENTS_API_URL: ''
+  _PUBLISH_CONCERN_URL: ''
+  _POST_REPLY_URL: ''
+  _DF_AGENT_ID: ''
+  _GCP_PROJECT_ID: ''
+  _FIREBASE_API_KEY: ''
+  _LOOKER_REPORT_URL: ''
+
+steps:
+  # Fail before a 3-minute build if a CI variable is missing. _DF_AGENT_ID and
+  # _POST_REPLY_URL are deliberately allowed to be empty: the chatbot widget
+  # and the reply form both feature-detect and render nothing when unset.
+  - id: check-build-args
+    name: gcr.io/cloud-builders/gcloud
+    entrypoint: bash
+    args:
+      - -c
+      # Shell variables are written $$name, not $name: Cloud Build expands $name
+      # itself before bash ever sees it, which would blank them out and make
+      # this check silently pass no matter what.
+      - |
+        set -e
+        missing=""
+        for pair in \
+          "REACT_APP_AUTH_API_URL=${_AUTH_API_URL}" \
+          "REACT_APP_APPOINTMENTS_API_URL=${_APPOINTMENTS_API_URL}" \
+          "REACT_APP_PUBLISH_CONCERN_URL=${_PUBLISH_CONCERN_URL}" \
+          "REACT_APP_GCP_PROJECT_ID=${_GCP_PROJECT_ID}" \
+          "REACT_APP_FIREBASE_API_KEY=${_FIREBASE_API_KEY}" \
+          "REACT_APP_LOOKER_REPORT_URL=${_LOOKER_REPORT_URL}"; do
+          name="$${pair%%=*}"
+          value="$${pair#*=}"
+          if [ -z "$$value" ]; then missing="$$missing $$name"; fi
+        done
+        if [ -n "$$missing" ]; then
+          echo "Missing required build args:$$missing"
+          echo "Set them as GitLab CI/CD variables (see docs/architecture/setup.md)."
+          exit 1
+        fi
+        echo "All required build args present."
+
+  # The AWS endpoints come from a Learner Lab, whose API Gateway ids change
+  # whenever the lab session rotates. A stale one still builds and deploys
+  # cleanly and then 404s every services/feedback call in production, which is
+  # exactly what happened on the first automated deploy. Probe them here so a
+  # rotated endpoint fails the build with a clear message instead of shipping.
+  - id: check-api-endpoints
+    name: gcr.io/cloud-builders/gcloud
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        set -e
+        fail=0
+
+        code=$$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "${_APPOINTMENTS_API_URL}/services" || echo 000)
+        if [ "$$code" != "200" ]; then
+          echo "FAIL appointments API: ${_APPOINTMENTS_API_URL}/services returned HTTP $$code (expected 200)"
+          fail=1
+        else
+          echo "OK   appointments API serves /services"
+        fi
+
+        # /auth/me is auth-gated, so 401 means the route exists and is wired up.
+        # 404 means this is the wrong API Gateway entirely.
+        code=$$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "${_AUTH_API_URL}/auth/me" || echo 000)
+        if [ "$$code" != "401" ] && [ "$$code" != "200" ]; then
+          echo "FAIL auth API: ${_AUTH_API_URL}/auth/me returned HTTP $$code (expected 401 or 200)"
+          fail=1
+        else
+          echo "OK   auth API serves /auth/me"
+        fi
+
+        if [ "$$fail" != "0" ]; then
+          echo ""
+          echo "AWS Learner Lab endpoints rotate when the session resets."
+          echo "Get the current API Gateway URLs from the AWS module owner, update"
+          echo "REACT_APP_AUTH_API_URL / REACT_APP_APPOINTMENTS_API_URL in GitLab"
+          echo "CI/CD variables, then retry this job."
+          exit 1
+        fi
+
+  - id: build-frontend-image
+    name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - --build-arg=REACT_APP_AUTH_API_URL=${_AUTH_API_URL}
+      - --build-arg=REACT_APP_APPOINTMENTS_API_URL=${_APPOINTMENTS_API_URL}
+      - --build-arg=REACT_APP_PUBLISH_CONCERN_URL=${_PUBLISH_CONCERN_URL}
+      - --build-arg=REACT_APP_POST_REPLY_URL=${_POST_REPLY_URL}
+      - --build-arg=REACT_APP_DF_AGENT_ID=${_DF_AGENT_ID}
+      - --build-arg=REACT_APP_GCP_PROJECT_ID=${_GCP_PROJECT_ID}
+      - --build-arg=REACT_APP_FIREBASE_API_KEY=${_FIREBASE_API_KEY}
+      - --build-arg=REACT_APP_LOOKER_REPORT_URL=${_LOOKER_REPORT_URL}
+      - -t
+      - gcr.io/$PROJECT_ID/saws-frontend:${_TAG}
+      - -t
+      - gcr.io/$PROJECT_ID/saws-frontend:latest
+      - .
+
+  # Confirm the endpoints actually landed in the bundle rather than trusting a
+  # green build: an empty --build-arg produces a valid image whose JS contains
+  # "undefined" for that endpoint.
+  - id: verify-bundle
+    name: gcr.io/cloud-builders/docker
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        set -e
+        docker run --rm --entrypoint sh gcr.io/$PROJECT_ID/saws-frontend:${_TAG} -c \
+          "grep -q 'execute-api' /usr/share/nginx/html/static/js/main.*.js" \
+          || { echo "Bundle has no API Gateway endpoint: a build arg was empty."; exit 1; }
+        echo "Bundle contains the expected API endpoints."
+
+images:
+  - gcr.io/$PROJECT_ID/saws-frontend:${_TAG}
+  - gcr.io/$PROJECT_ID/saws-frontend:latest
+
+options:
+  logging: CLOUD_LOGGING_ONLY

@@ -1,0 +1,40 @@
+imports:
+  - path: cloud_run.jinja
+  - path: pubsub.jinja
+
+resources:
+
+  # ── Pub/Sub Topic ──────────────────────────────────────────────────────────
+  - name: saws-patient-concerns
+    type: gcp-types/pubsub-v1:projects.topics
+    properties:
+      topic: saws-patient-concerns
+
+  - name: saws-coordinator-subscription
+    type: gcp-types/pubsub-v1:projects.subscriptions
+    properties:
+      subscription: saws-coordinator-subscription
+      topic: $(ref.saws-patient-concerns.name)
+      ackDeadlineSeconds: 30
+
+  # ── Cloud Run Service (Frontend) ───────────────────────────────────────────
+  - name: saws-frontend
+    type: gcp-types/run-v1:namespaces.services
+    properties:
+      parent: namespaces/$(env.project)
+      apiVersion: serving.knative.dev/v1
+      kind: Service
+      metadata:
+        name: saws-frontend
+        namespace: $(env.project)
+      spec:
+        template:
+          spec:
+            containers:
+              - image: gcr.io/$(env.project)/saws-frontend:latest
+                ports:
+                  - containerPort: 8080
+                resources:
+                  limits:
+                    cpu: "1"
+                    memory: 512Mi

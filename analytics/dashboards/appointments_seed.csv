@@ -1,0 +1,8 @@
+refCode,date,service,status
+APT-1001,2026-07-02,Physiotherapy,APPROVED
+APT-1002,2026-07-03,Nutrition Counselling,PENDING
+APT-1003,2026-07-03,Mental Health,APPROVED
+APT-1004,2026-07-04,Physiotherapy,CANCELLED
+APT-1005,2026-07-05,Physiotherapy,APPROVED
+APT-1006,2026-07-05,General Consultation,REJECTED
+APT-1007,2026-07-06,Mental Health,PENDING

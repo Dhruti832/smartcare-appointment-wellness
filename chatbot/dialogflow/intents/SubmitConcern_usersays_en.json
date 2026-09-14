@@ -1,0 +1,69 @@
+[
+  {
+    "id": "8c8e7c98-85f7-4d1d-866e-f918d6ba9b34",
+    "data": [
+      {
+        "text": "I want to report a problem with my care"
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "2355ce60-fc9b-48af-ad99-514b3d60aa7a",
+    "data": [
+      {
+        "text": "I have a concern about "
+      },
+      {
+        "text": "my last appointment",
+        "alias": "concern",
+        "meta": "@sys.any",
+        "userDefined": true
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "e6ced163-97e0-4a71-b5e0-e92b0e75af31",
+    "data": [
+      {
+        "text": "I need to speak to a coordinator about "
+      },
+      {
+        "text": "a billing issue",
+        "alias": "concern",
+        "meta": "@sys.any",
+        "userDefined": true
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "ac941109-9b21-498b-b4ac-adf6091e1761",
+    "data": [
+      {
+        "text": "Can you forward a complaint to my coordinator?"
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "99540c7e-ef0f-486a-83fe-06f9270b631f",
+    "data": [
+      {
+        "text": "I want to submit a concern"
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  }
+]

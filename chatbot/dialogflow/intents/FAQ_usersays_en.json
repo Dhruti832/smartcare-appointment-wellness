@@ -1,0 +1,183 @@
+[
+  {
+    "id": "35e1020b-5453-4324-9a51-4ba20de93eaf",
+    "data": [
+      { "text": "What are your " },
+      { "text": "hours", "alias": "topic", "meta": "@faq-topic", "userDefined": true },
+      { "text": "?" }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "57fdec4a-4c0a-4602-9ab6-a83dd49856f8",
+    "data": [
+      { "text": "What time are you open?" }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "7328eef2-8ee2-4065-8210-6c039b555342",
+    "data": [
+      { "text": "What are your " },
+      { "text": "hours of operation", "alias": "topic", "meta": "@faq-topic", "userDefined": true },
+      { "text": "?" }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "1fb0ee1d-0f23-4fec-b966-e8a305b40ba9",
+    "data": [
+      { "text": "What's " },
+      { "text": "your schedule", "alias": "topic", "meta": "@faq-topic", "userDefined": true },
+      { "text": " like?" }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "53798aee-647d-4ff7-9d74-1f66f1c9316c",
+    "data": [
+      { "text": "How do I " },
+      { "text": "cancel an appointment", "alias": "topic", "meta": "@faq-topic", "userDefined": true },
+      { "text": "?" }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "661bf4ad-037a-4844-b409-709aadb274ee",
+    "data": [
+      { "text": "What is your " },
+      { "text": "cancellation policy", "alias": "topic", "meta": "@faq-topic", "userDefined": true },
+      { "text": "?" }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "f20973ae-de84-4914-81ed-5f8e92af1318",
+    "data": [
+      { "text": "Can I " },
+      { "text": "cancel my appointment", "alias": "topic", "meta": "@faq-topic", "userDefined": true },
+      { "text": "?" }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "49347381-caaf-4a76-bcef-af3cfefc2e8b",
+    "data": [
+      { "text": "How do I " },
+      { "text": "book an appointment", "alias": "topic", "meta": "@faq-topic", "userDefined": true },
+      { "text": "?" }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "107e859d-69c6-4962-a9cd-3a12d478fb2c",
+    "data": [
+      { "text": "Can you help me with " },
+      { "text": "booking", "alias": "topic", "meta": "@faq-topic", "userDefined": true },
+      { "text": "?" }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "7a395992-3458-4925-a313-0de4974a7567",
+    "data": [
+      { "text": "I want to " },
+      { "text": "schedule an appointment", "alias": "topic", "meta": "@faq-topic", "userDefined": true }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "aa0000a3-7f54-4c80-8f4b-55c179ea5fe8",
+    "data": [
+      { "text": "Do you accept " },
+      { "text": "insurance", "alias": "topic", "meta": "@faq-topic", "userDefined": true },
+      { "text": "?" }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "2e84d802-38d8-4891-8e27-a7d37cc211d8",
+    "data": [
+      { "text": "Which " },
+      { "text": "insurance plans", "alias": "topic", "meta": "@faq-topic", "userDefined": true },
+      { "text": " do you accept?" }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "168f979c-7da3-43ce-9443-42f7819f3289",
+    "data": [
+      { "text": "Is this covered by " },
+      { "text": "insurance coverage", "alias": "topic", "meta": "@faq-topic", "userDefined": true },
+      { "text": "?" }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "7b5252c4-da3b-43c8-9144-bd53e9b45f12",
+    "data": [
+      { "text": "How does " },
+      { "text": "login", "alias": "topic", "meta": "@faq-topic", "userDefined": true },
+      { "text": " work?" }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "0f641967-f2a5-4e57-9341-d05045562791",
+    "data": [
+      { "text": "I'm having " },
+      { "text": "trouble logging in", "alias": "topic", "meta": "@faq-topic", "userDefined": true }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "6ec4393e-5460-432f-9d71-c45875d47dcb",
+    "data": [
+      { "text": "How do I " },
+      { "text": "sign into my account", "alias": "topic", "meta": "@faq-topic", "userDefined": true },
+      { "text": "?" }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "0ad117d6-a16e-4adf-a369-b120344b9466",
+    "data": [
+      { "text": "What is your policy on unicorns?" }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  }
+]

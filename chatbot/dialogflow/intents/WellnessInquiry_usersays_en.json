@@ -1,0 +1,160 @@
+[
+  {
+    "id": "eb034bb4-5c1f-41de-bd68-7ac2cc26d472",
+    "data": [
+      { "text": "What " },
+      { "text": "yoga", "alias": "serviceType", "meta": "@service-type", "userDefined": true },
+      { "text": " services do you offer?" }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "02919387-8ce6-4f98-aaa6-71442bda76e7",
+    "data": [
+      { "text": "Can I book a " },
+      { "text": "yoga class", "alias": "serviceType", "meta": "@service-type", "userDefined": true },
+      { "text": "?" }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "83559a34-254e-45f2-950f-2e673d10e9d2",
+    "data": [
+      { "text": "Do you run " },
+      { "text": "yoga sessions", "alias": "serviceType", "meta": "@service-type", "userDefined": true },
+      { "text": "?" }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "c9a8a448-dc3f-4d59-816c-2458f3ffdb08",
+    "data": [
+      { "text": "Do you have any " },
+      { "text": "physiotherapy", "alias": "serviceType", "meta": "@service-type", "userDefined": true },
+      { "text": " options?" }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "e0f840b0-a4f2-4459-8222-1eefd4b25f7e",
+    "data": [
+      { "text": "I need " },
+      { "text": "physio", "alias": "serviceType", "meta": "@service-type", "userDefined": true },
+      { "text": " for my knee" }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "f00852fc-7e3a-45b1-832d-8b4ab281e101",
+    "data": [
+      { "text": "What " },
+      { "text": "physiotherapy programs", "alias": "serviceType", "meta": "@service-type", "userDefined": true },
+      { "text": " are available?" }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "81ac62e6-8ba5-4485-950d-96cfb98b67a8",
+    "data": [
+      { "text": "Tell me about your " },
+      { "text": "nutrition", "alias": "serviceType", "meta": "@service-type", "userDefined": true },
+      { "text": " coaching" }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "f9060667-b6e6-4eeb-8dae-fa34bf85cb5e",
+    "data": [
+      { "text": "Can I get help with my diet from a " },
+      { "text": "nutritionist", "alias": "serviceType", "meta": "@service-type", "userDefined": true },
+      { "text": "?" }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "deed09c4-a153-4637-87e0-ca692cb0e4e6",
+    "data": [
+      { "text": "Do you have a " },
+      { "text": "diet plan", "alias": "serviceType", "meta": "@service-type", "userDefined": true },
+      { "text": " service?" }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "ebaea89a-2c31-4ccb-bffa-0f416cb6367e",
+    "data": [
+      { "text": "I need " },
+      { "text": "mental-health", "alias": "serviceType", "meta": "@service-type", "userDefined": true },
+      { "text": " support" }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "1965c556-21b3-4f2c-91e6-d3cd79b1e431",
+    "data": [
+      { "text": "I'd like to talk to a " },
+      { "text": "counsellor", "alias": "serviceType", "meta": "@service-type", "userDefined": true }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "59ee787d-6e76-4055-a22d-17b3930580ed",
+    "data": [
+      { "text": "Do you offer " },
+      { "text": "therapy sessions", "alias": "serviceType", "meta": "@service-type", "userDefined": true },
+      { "text": "?" }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "c3ae4d21-a296-4a0d-99d0-f0320399b9d9",
+    "data": [
+      { "text": "Do you offer astrology?" }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "b2bb0da1-b4b4-4e8a-b364-c14550d003b3",
+    "data": [
+      { "text": "What wellness services do you offer?" }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  },
+  {
+    "id": "b6c83b79-b2e4-4170-9e71-e8d87f456f77",
+    "data": [
+      { "text": "Can you list your wellness packages?" }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "updated": 0
+  }
+]

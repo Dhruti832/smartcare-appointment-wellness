@@ -1,0 +1,260 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: SAWS - AWS Infrastructure (Cognito, DynamoDB, SQS, SNS, Lambda)
+
+Parameters:
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues: [dev, staging, prod]
+
+Resources:
+
+  # ── Cognito User Pool (Stage 1 Auth) ──────────────────────────────────────
+  SAWSUserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: !Sub saws-user-pool-${Environment}
+      UsernameAttributes: [email]
+      AutoVerifiedAttributes: [email]
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+          RequireUppercase: true
+          RequireLowercase: true
+          RequireNumbers: true
+          RequireSymbols: false
+
+  SAWSUserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      ClientName: saws-web-client
+      UserPoolId: !Ref SAWSUserPool
+      GenerateSecret: false
+      ExplicitAuthFlows:
+        - ALLOW_USER_PASSWORD_AUTH
+        - ALLOW_REFRESH_TOKEN_AUTH
+
+  # ── DynamoDB Tables ───────────────────────────────────────────────────────
+  # Users table holds profile data only (name, contact info). Auth mechanics
+  # (security Q&A, Caesar cipher, session state) live in the authentication
+  # module's own UserSecurity/AuthSessions tables, joined on `username`.
+  UsersTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub saws-users-${Environment}
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: username
+          AttributeType: S
+      KeySchema:
+        - AttributeName: username
+          KeyType: HASH
+
+  AppointmentsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub saws-appointments-${Environment}
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: appointmentId
+          AttributeType: S
+        - AttributeName: patientUsername
+          AttributeType: S
+        - AttributeName: status
+          AttributeType: S
+        - AttributeName: date
+          AttributeType: S
+      KeySchema:
+        - AttributeName: appointmentId
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: patientUsername-index
+          KeySchema:
+            - AttributeName: patientUsername
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+        - IndexName: status-date-index
+          KeySchema:
+            - AttributeName: status
+              KeyType: HASH
+            - AttributeName: date
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+
+  ServicesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub saws-services-${Environment}
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: serviceId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: serviceId
+          KeyType: HASH
+
+  FeedbackTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub saws-feedback-${Environment}
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: feedbackId
+          AttributeType: S
+        - AttributeName: patientUsername
+          AttributeType: S
+        - AttributeName: serviceId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: feedbackId
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: patientUsername-index
+          KeySchema:
+            - AttributeName: patientUsername
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+        - IndexName: serviceId-index
+          KeySchema:
+            - AttributeName: serviceId
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+
+  AuthLogsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub saws-auth-logs-${Environment}
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: logId
+          AttributeType: S
+        - AttributeName: username
+          AttributeType: S
+        - AttributeName: createdAt
+          AttributeType: S
+      KeySchema:
+        - AttributeName: logId
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: username-index
+          KeySchema:
+            - AttributeName: username
+              KeyType: HASH
+            - AttributeName: createdAt
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+
+  AppointmentLogsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub saws-appointment-logs-${Environment}
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: logId
+          AttributeType: S
+        - AttributeName: appointmentId
+          AttributeType: S
+        - AttributeName: createdAt
+          AttributeType: S
+      KeySchema:
+        - AttributeName: logId
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: appointmentId-index
+          KeySchema:
+            - AttributeName: appointmentId
+              KeyType: HASH
+            - AttributeName: createdAt
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+
+  # ── SQS Queue (Appointment Requests) ─────────────────────────────────────
+  AppointmentQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: !Sub saws-appointment-queue-${Environment}
+      VisibilityTimeout: 60
+      MessageRetentionPeriod: 86400
+
+  # ── SNS Topic (Notifications) ─────────────────────────────────────────────
+  NotificationsTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: !Sub saws-notifications-${Environment}
+      DisplayName: SAWS Notifications
+
+  # ── IAM Role for Lambda ───────────────────────────────────────────────────
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub saws-lambda-role-${Environment}
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: SAWSLambdaPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:GetItem
+                  - dynamodb:PutItem
+                  - dynamodb:UpdateItem
+                  - dynamodb:Query
+                  - dynamodb:Scan
+                Resource:
+                  - !GetAtt UsersTable.Arn
+                  - !GetAtt AppointmentsTable.Arn
+                  - !GetAtt ServicesTable.Arn
+                  - !GetAtt FeedbackTable.Arn
+                  - !GetAtt AuthLogsTable.Arn
+                  - !GetAtt AppointmentLogsTable.Arn
+                  - !Sub ${AppointmentsTable.Arn}/index/*
+                  - !Sub ${FeedbackTable.Arn}/index/*
+                  - !Sub ${AuthLogsTable.Arn}/index/*
+                  - !Sub ${AppointmentLogsTable.Arn}/index/*
+              - Effect: Allow
+                Action:
+                  - sqs:SendMessage
+                  - sqs:ReceiveMessage
+                  - sqs:DeleteMessage
+                  - sqs:GetQueueAttributes
+                Resource: !GetAtt AppointmentQueue.Arn
+              - Effect: Allow
+                Action:
+                  - sns:Publish
+                Resource: !Ref NotificationsTopic
+
+Outputs:
+  UserPoolId:
+    Value: !Ref SAWSUserPool
+    Export:
+      Name: !Sub saws-UserPoolId-${Environment}
+
+  UserPoolClientId:
+    Value: !Ref SAWSUserPoolClient
+    Export:
+      Name: !Sub saws-UserPoolClientId-${Environment}
+
+  AppointmentQueueUrl:
+    Value: !Ref AppointmentQueue
+    Export:
+      Name: !Sub saws-AppointmentQueueUrl-${Environment}
+
+  NotificationsTopicArn:
+    Value: !Ref NotificationsTopic
+    Export:
+      Name: !Sub saws-NotificationsTopicArn-${Environment}

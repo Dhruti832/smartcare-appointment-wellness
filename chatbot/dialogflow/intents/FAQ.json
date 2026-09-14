@@ -1,0 +1,46 @@
+{
+  "id": "8017f5a7-55b9-4cb4-98a8-ef65c7429c4a",
+  "name": "FAQ",
+  "auto": true,
+  "contexts": [],
+  "responses": [
+    {
+      "resetContexts": false,
+      "action": "faq.general",
+      "affectedContexts": [],
+      "parameters": [
+        {
+          "id": "08af0432-986c-4ce3-b067-1871a1c032c5",
+          "name": "topic",
+          "required": true,
+          "dataType": "@faq-topic",
+          "value": "$topic",
+          "defaultValue": "",
+          "isList": false,
+          "prompts": [
+            "What would you like to know more about?"
+          ],
+          "promptMessages": [],
+          "noMatchPromptMessages": [],
+          "noInputPromptMessages": [],
+          "outputDialogContexts": []
+        }
+      ],
+      "messages": [
+        {
+          "type": "0",
+          "lang": "en",
+          "condition": "",
+          "speech": []
+        }
+      ],
+      "defaultResponsePlatforms": {},
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": true,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": []
+}

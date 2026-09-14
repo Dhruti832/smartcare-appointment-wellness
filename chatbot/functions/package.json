@@ -1,0 +1,14 @@
+{
+  "name": "saws-chatbot-functions",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "@google-cloud/firestore": "^7.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0"
+  },
+  "scripts": {
+    "test": "jest"
+  }
+}
